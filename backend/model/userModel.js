@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
          required:false,
          default:false
      },
+     image:{
+        type:String,
+        required:false
+     },
      isActive:{
       type:Boolean,
       required:false,

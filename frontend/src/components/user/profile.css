@@ -1,0 +1,10 @@
+.fileUploadLabel{
+    height: 100px;
+    width: 110px;
+    border-radius: 6px;
+    border:1px dashed #999 ;
+}
+.fileUploadLabel:hover{
+    color:#de0611;
+    border:1px dashed #de0611; ;
+}

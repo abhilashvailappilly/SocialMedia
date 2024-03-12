@@ -191,6 +191,14 @@ h3 {
   animation: spin 1.2s linear infinite;
 }
 
+/* App.css */
+.toast-container {
+  /* Define your desired width and height */
+  width: 300px;
+  height: auto; /* or specify a fixed height */
+}
+
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

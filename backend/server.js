@@ -1,5 +1,6 @@
 const express = require('express')
 const colors  =  require('colors')
+const cors = require('cors')
 const dotenv = require('dotenv').config()
 const {errorHandler} =require('./middleware/errorMiddleware')
 
@@ -12,7 +13,7 @@ const port = 5000 || process.env.PORT
 
 app.use(express.urlencoded({extended:true}))
 app. use(express.json());
-
+app.use(cors())
 //for user router
 const userRoute = require('./Routes/route')
 app.use('/',userRoute);

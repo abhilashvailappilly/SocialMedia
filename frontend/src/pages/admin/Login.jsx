@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify'
 
 
-import { login,reset } from '../features/auth/authSlice'
-import Spinner from '../components/Spinner'
+import { adminLogin,resetAdmin } from '../../features/admin/adminSlice'
+import Spinner from '../../components/Spinner'
 
 function Login() {
     
@@ -20,17 +20,17 @@ function Login() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
-	const {user,isError,isSucces,isLoading ,message} = useSelector((state) => state.auth) 
-
+	const {admin,isError,isSucces,isLoading ,message} = useSelector((state) => state.admin) 
+    console.log('admin',admin,isError,isSucces,isLoading ,message)
 	useEffect (()=>{
-		if(isError){
+		if(isError){   
 			toast.error(message)
 		}
-		if(isSucces || user){
-			navigate('/')
+		if(isSucces || admin){
+			navigate('/admin/home') 
 		}
-		dispatch(reset())
-	},[user,isError,isSucces,message,navigate,dispatch])
+		dispatch(resetAdmin())
+	},[admin,isError,isSucces,message,navigate,dispatch])
 
  
 	const onChange =(e)=>{
@@ -40,15 +40,16 @@ function Login() {
 		}))
 	}
 	const onSubmit =(e)=>{
-		e.preventDefault()
-		if(!email.trim() ||  !password.trim() || !password.length >5){
+		e.preventDefault()  
+        if(!email.trim() ||  !password.trim() ){
 			toast.error('Please fill all the fields')
         } else{
-			const userData = {
-				email,password
-			}
-			dispatch(login(userData)) 
-		}
+            const adminData = {
+                email,password 
+            }
+            dispatch(adminLogin(adminData))
+        }
+	
 }
 	if(isLoading) {
 		return <Spinner/>
@@ -56,8 +57,8 @@ function Login() {
   return (
    <>
         <section className='heading'>
-			<h1> <FaSignInAlt/> Login</h1>
-			<p>Login and start your account</p>
+			<h1> <FaSignInAlt/> Admin Login</h1>
+			<p>Login to your account</p>
         </section>
         <section className="form">
 			<form action="" onSubmit={onSubmit}>
