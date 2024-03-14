@@ -9,7 +9,6 @@ import Header from './components/Header';
 import AdminLogin from './pages/admin/Login'
 import AdminHome from './pages/admin/Home'
 import NotFoundPage from './components/NotFoundPage';
-import UserDataSetting from './components/UserDataSetting';
 function App() {
   return (
     <>
@@ -27,7 +26,6 @@ function App() {
 
           <Route path='/adminLogin' element={<AdminLogin />}></Route>
           <Route path='/admin/home' element={<AdminHome />}></Route>
-          <Route path='/userDataSetting' element={<UserDataSetting />}></Route>
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </div>
