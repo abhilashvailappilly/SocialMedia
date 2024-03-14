@@ -14,14 +14,14 @@ const port = 5000 || process.env.PORT
 app.use(express.urlencoded({extended:true}))
 app. use(express.json());
 app.use(cors())
+app.use(express.static('public'))
 //for user router
 const userRoute = require('./Routes/route')
+const adminRoute = require('./Routes/adminRoute')
 app.use('/',userRoute);
+app.use('/admin',adminRoute);
 
-// app.use('/api/goals',require('./Routes/route'))
-app.get('/api/user',(req,res)=>{
-    res.json({name:"Abhilash v s"})
-})
+
 app.use(errorHandler)
 
 app.listen(port,()=>console.log(`Server Started on http://localhost:${port}`))

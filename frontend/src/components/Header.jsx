@@ -23,7 +23,7 @@ function Header() {
   return (
     <header className="header">
         <div className="logo">
-            <Link to='/' > GoalSetter</Link>
+            <Link to='/' > User management </Link>
         </div>
         <ul>
            
@@ -79,7 +79,7 @@ function Header() {
                 </>
             ) : null
            }
-           
+          
         </ul>
     </header>
   )

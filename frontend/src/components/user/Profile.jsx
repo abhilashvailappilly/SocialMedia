@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {FaCheck, FaFileUpload} from 'react-icons/fa'
+import {FaCheck, FaFileUpload,FaEdit,FaUserEdit} from 'react-icons/fa'
 import {useSelector,useDispatch} from 'react-redux'
 import {toast} from 'react-toastify'
 
@@ -17,9 +17,10 @@ export default function Profile() {
 	const [formData,setFormData] = useState({
         name:user.name,
         email:user.email,
-        phone:user.phone
+        phone:user.phone,
+		image:user.image
     })
-    const {name,email,phone} = formData
+    let {name,email,phone,image} = formData
     
 	const {isError,isSuccess,isLoading,message} = useSelector((state) => state.updation) 
 
@@ -36,9 +37,18 @@ export default function Profile() {
 	},[user,isError,isSuccess,message,dispatch])
 
     const handleProfileUpload =() =>{
-        const formData = new FormData()
-        formData.append('image',file)
-		dispatch(uploadProfile(formData))
+        const formData1 = new FormData()
+        formData1.append('image',file)
+
+		dispatch(uploadProfile(formData1))
+		.then((da)=>{
+			
+			setFormData((prevState)=>({
+				...prevState,
+				['image']:da.payload.image
+			}))
+		})
+		
 		setPreviewImage(null)
   
     } 
@@ -51,6 +61,7 @@ export default function Profile() {
 	}
     const handleFileChange = (e) => {
       const file = e.target.files[0];
+	
       if(file){
         setFile(e.target.files[0])
       }
@@ -71,7 +82,9 @@ export default function Profile() {
 	
 	const submitEditProfile =(e)=>{
 		e.preventDefault()
-		if(!name.trim() || !email.trim() || !phone.trim()) {
+		if(!name.trim() || !email.trim()) {
+			toast.error("Please fill all the fileds")
+ 		} else {
 			const userData = {
 				name,
 				email,
@@ -79,28 +92,23 @@ export default function Profile() {
 			}
 
 			dispatch(editProfile(userData))
-		} else {
-			toast.error("Please fill all the fileds")
+			setEditDiv(false)
 		}
-			
-		
 	}
 
 	if(isLoading){
-		return <Spinner/>
+		return <Spinner/> 
 	}
   return (
-    <section className="vh-100" style={{ backgroundColor: '#f4f5f7' }}>
-        <div className='d-flex'>
-            <div>
-            <img  style={{ borderRadius: '50%', width: '200px', height: '200px' }} src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Mo_o7hVWXYlm2SqJbcGHXgHaEo%26pid%3DApi&f=1&ipt=91c3ab07f428636e799aa20c6efd424f666004aa2a0f27c8994a3f475e0b48f6&ipo=images" alt="" />
-            {/* <img  style={{ borderRadius: '50%', width: '200px', height: '200px' }} src={user.image ? `../../../` :"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Mo_o7hVWXYlm2SqJbcGHXgHaEo%26pid%3DApi&f=1&ipt=91c3ab07f428636e799aa20c6efd424f666004aa2a0f27c8994a3f475e0b48f6&ipo=images"} alt="" /> */}
-			{/* <img src='1710165240080-burgerhub.png' alt="" /> */}
-			{/* <img src="./1710165240080-burgerhub.png" alt="" /> */}
-			{/* <img src="logo512.png" alt="" /> */}
-
-            </div>
+    <section className="vh-80 d-flex justify-content-between" style={{ backgroundColor: 'rgb(204 219 247)',borderRadius:'10px' }}>
+        <div className='d-flex flex-column  '  style={{width:'30%'}} width='50%'>
             <div className="">
+            <div>
+            {/* <img  style={{ borderRadius: '50%', width: '200px', height: '200px' }} src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Mo_o7hVWXYlm2SqJbcGHXgHaEo%26pid%3DApi&f=1&ipt=91c3ab07f428636e799aa20c6efd424f666004aa2a0f27c8994a3f475e0b48f6&ipo=images" alt="" /> */}
+            <img  style={{ borderRadius: '50%', width: '200px', height: '200px' }} src={image ? '../../user/'+image :"https://tse3.mm.bing.net/th?id=OIP.K8yunvrQA8a0MY5khxh_iQHaFR&pid=Api&P=0&h=180"} alt="" />
+			
+ 
+            </div>
             <div>
                  {previewImage && 
                     <>
@@ -111,15 +119,16 @@ export default function Profile() {
             </div>
            <div>
            {!previewImage &&
-                <>
-                     <FaFileUpload/> <input type="file" hidden className="" id='image' name='image'  onChange={handleFileChange}  /> 
-                    <label htmlFor="image" className='fileUploadLabel'>upload</label>
-                </>
+                <div >
+                     <FaFileUpload/> <input type="file" hidden className="" id='image' name='image'  accept="image/*" onChange={handleFileChange}  /> 
+                    <label htmlFor="image" style={{height:'50px'}} className='fileUploadLabel'>upload</label>
+                </div>
              }
            </div>
-		</div>
+			</div>
            
         </div>
+	<div className=' d-flex flex-column justify-content-center' style={{width:'70%'}}>
       <div>
         {
 			user.name && <h4>Name : {name} </h4>
@@ -130,11 +139,13 @@ export default function Profile() {
 		{
 			user.phone && <h4>Mobile : {phone} </h4>
 		}
+		
        
 
       </div>
 	  <div>
-		<button onClick={handleEditPreviewClick}>Edit Profile</button>
+		{/* <button >Edit Profile</button> */}
+		<FaUserEdit onClick={handleEditPreviewClick} className="w-2" style={{ width: '2rem', height: '2rem', cursor: 'pointer' }}/>Edit proile
 	  </div>
       {
 		editDiv && <div>
@@ -146,7 +157,7 @@ export default function Profile() {
 					<input type="email" className="form-control" id='email' name='email' value={email} placeholder='Enter your email' onChange={onChange}  />
 				</div>
 				<div className="form-group">
-					<input type="mobile" className="form-control" id='phone ' name ='phone' value={phone} placeholder='Enter your phone number ' onChange={onChange}  />
+					<input type="tel" pattern="[0-9]{10}"  className="form-control" id='phone ' name ='phone' value={phone} placeholder='Enter your phone number ' onChange={onChange}  />
 				</div>
 				
 				<div className="form-group">
@@ -155,6 +166,7 @@ export default function Profile() {
 			</form>
 		</div>
 	  }
+	  </div>
     </section>
   );
 }

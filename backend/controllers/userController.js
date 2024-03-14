@@ -68,13 +68,13 @@ const loginUser = async (req,res) =>{
         const {email,password} = req.body
 
         const user = await User.findOne({email})
-        if(user && (await bcrypt.compare(password,user.password))){
+        if(user && user.isActive && (await bcrypt.compare(password,user.password))){
             res.json({
                 _id:user.id,
                 name:user.name,
                 email:user.email,
                 phone:user.phone,
-                image:user.image,
+                image:user.image || "",
                 token:generateToken(user._id)
             })
         } else{
@@ -95,7 +95,16 @@ const uploadProfile = async(req,res) =>{
             const user = await User.findByIdAndUpdate((req.user._id),{image:req.file.filename},{new:true})
             // user.image
             console.log(user) 
-            return res.status(200).json({message:'Profile updated successfully'});
+            //  res.status(200).json({
+            //    message:"Profile updated successfully",image:user.image
+            // })
+            return res.status(200).json({
+                _id:user.id,
+                name:user.name,
+                email:user.email,
+                phone:user.phone,
+                image:user.image,
+                token:generateToken(user._id)});
         }
         return res.status(400).json({message:'No files were uploaded.'});
 

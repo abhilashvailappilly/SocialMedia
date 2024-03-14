@@ -11,9 +11,10 @@ const uploadProfile = async (formData,token) =>{
     }
     const uploadProfile = await  axios.post('/uploadProfile',formData,config)
     if(uploadProfile.data) {
-        // localStorage.setItem('user',JSON.stringify(response.data))
+        console.log("Updated profile return data :",uploadProfile.data)
+        // localStorage.removeItem('user');
+        // localStorage.setItem('user',JSON.stringify(uploadProfile.data))
 	// const {user,isError,isSucces,isLoading ,message} = useSelector((state) => state.updation) 
-        console.log(uploadProfile.data)
          
     }
 

@@ -45,7 +45,7 @@ export const editProfile = createAsyncThunk('/editProfile',async(formData,thunkA
 
 
 export const userSlice = createSlice({
-    name: 'auth',
+    name: 'authUp',
     initialState,
     reducers:{
         reset:(state) =>{
@@ -64,14 +64,14 @@ export const userSlice = createSlice({
             state.isLoading = false
             state.isSuccess = true
             state.toast = true
-            state.message = action.payload.message
             state.user = action.payload
+            state.message = action.payload.message
         })
         .addCase(uploadProfile.rejected,(state,action)=> {
             state.isLoading = false
             state.isError = true 
             state.message = action.payload
-            state.user = null
+            state.user = null // 
         })
         .addCase(editProfile.pending,(state) => {
             state.isLoading = true 
